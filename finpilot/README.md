@@ -109,6 +109,16 @@ Defined in `frontend/tailwind.config.ts` and `frontend/app/globals.css`:
   with an animated count-up and a tone-tinted ambient glow that reflects financial health at a
   glance.
 
+## Features
+
+- Financial Health Score Analysis
+- Future Cost Prediction (Inflation-based)
+- Micro-Investment Planning
+- What-If Financial Simulator 
+- PDF Report Generation 
+- Interactive Charts & Insights
+
+
 ## Notes
 
 - The "smart insights" engine is intentionally rule-based (see `backend/utils/calculations.js`)
@@ -116,3 +126,5 @@ Defined in `frontend/tailwind.config.ts` and `frontend/app/globals.css`:
   without changing the API shape.
 - This is a demo application; figures and recommendations are illustrative and not financial
   advice.
+
+
