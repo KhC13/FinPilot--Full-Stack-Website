@@ -38,7 +38,7 @@ export default function SmartInsights({ inputs }: { inputs: FinancialFormValues 
   return (
     <GlassCard className="p-6 md:p-10" id="insights">
       <CardHeader
-        eyebrow="Section 04"
+        eyebrow="Section 05"
         title="Smart Insights"
         description="Rule-based reads on your financial habits, refreshed as you adjust your numbers."
         icon={<Brain className="h-5 w-5 text-accent-cyan" />}

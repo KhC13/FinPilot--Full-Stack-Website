@@ -7,6 +7,8 @@ import FinancialScoreCard, { FinancialFormValues } from '@/components/FinancialS
 import FutureCostSimulator from '@/components/FutureCostSimulator';
 import InvestmentEngine from '@/components/InvestmentEngine';
 import SmartInsights from '@/components/SmartInsights';
+import WhatIfSimulator from '@/components/WhatIfSimulator';
+import DownloadReportButton from '@/components/DownloadReportButton';
 
 const initialInputs: FinancialFormValues = { income: 80000, expenses: 45000, savings: 15000, debt: 120000 };
 
@@ -31,11 +33,15 @@ export default function DashboardPage() {
             FinPilot reads your income, spending, and goals to score your financial health, project how
             inflation reshapes the future, and lay out an investment plan you can actually stick to.
           </p>
+          <div className="mt-6">
+            <DownloadReportButton inputs={inputs} />
+          </div>
         </section>
 
         {/* Sections */}
         <div className="flex flex-col gap-8" id="score">
           <FinancialScoreCard inputs={inputs} onChange={setInputs} />
+          <WhatIfSimulator inputs={inputs} />
           <FutureCostSimulator />
           <InvestmentEngine />
           <SmartInsights inputs={inputs} />

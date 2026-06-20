@@ -34,7 +34,7 @@ export default function InvestmentEngine() {
   return (
     <GlassCard className="p-6 md:p-10" id="investment">
       <CardHeader
-        eyebrow="Section 03"
+        eyebrow="Section 04"
         title="Micro-Investment Engine"
         description="A goal-based plan, broken into amounts small enough to not feel like a sacrifice."
         icon={<Target className="h-5 w-5 text-accent-blue" />}

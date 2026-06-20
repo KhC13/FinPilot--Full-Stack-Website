@@ -28,7 +28,7 @@ export default function FutureCostSimulator() {
   return (
     <GlassCard className="p-6 md:p-10" id="future-cost">
       <CardHeader
-        eyebrow="Section 02"
+        eyebrow="Section 03"
         title="Future Cost Simulator"
         description="See how inflation quietly reshapes the price of your goals over time."
         icon={<TrendingUp className="h-5 w-5 text-accent-purple" />}
