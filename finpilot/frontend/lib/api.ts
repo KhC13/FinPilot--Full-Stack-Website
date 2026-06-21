@@ -2,7 +2,9 @@
 // Uses Next.js rewrites (see next.config.js) so calls to /api/* are
 // proxied to the Express server — no CORS headaches in dev.
 
-const BASE = "http://localhost:5000";
+const BASE =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "https://finpilot-backend-sd6y.onrender.com";
 
 async function postJSON<T>(path: string, body: object): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
