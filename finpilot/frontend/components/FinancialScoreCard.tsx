@@ -59,6 +59,7 @@ export default function FinancialScoreCard({ inputs, onChange }: FinancialScoreC
   ];
 
   return (
+    
     <GlassCard className="p-6 md:p-10" glow>
       <CardHeader
         eyebrow="Section 01"
