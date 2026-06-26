@@ -2,6 +2,7 @@
 import Navbar from '@/components/Navbar';
 import WhatIfSimulator from '@/components/WhatIfSimulator';
 import { useFinancial } from '@/lib/FinancialContext';
+import Link from 'next/dist/client/link';
 
 export default function Page() {
   const { inputs } = useFinancial();
@@ -22,7 +23,16 @@ export default function Page() {
       <Navbar />
       <div className="mx-auto max-w-4xl px-6 py-14 md:px-10">
         <WhatIfSimulator inputs={inputs} />
-      </div>
+      </div>   
+   <div className="mt-16 flex justify-between">
+  <Link href="/score" className="btn-secondary">
+    ← Financial Score
+  </Link>
+
+  <Link href="/future-cost" className="btn-primary">
+    Future Cost →
+  </Link>
+</div>    
     </main>
   );
 }

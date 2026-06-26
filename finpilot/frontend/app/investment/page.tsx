@@ -1,5 +1,6 @@
 import Navbar from '@/components/Navbar';
 import InvestmentEngine from '@/components/InvestmentEngine';
+import Link from 'next/dist/client/link';
 
 export default function Page() {
   return (
@@ -20,6 +21,15 @@ export default function Page() {
       <div className="mx-auto max-w-4xl px-6 py-14 md:px-10">
         <InvestmentEngine />
       </div>
+   <div className="mt-16 flex justify-between">
+  <Link href="/future-cost" className="btn-secondary">
+    ← Future Cost
+  </Link>
+
+  <Link href="/insights" className="btn-primary">
+    Insights →
+  </Link>
+</div>   
     </main>
   );
 }

@@ -2,6 +2,8 @@
 import Navbar from '@/components/Navbar';
 import FinancialScoreCard from '@/components/FinancialScoreCard';
 import { useFinancial } from '@/lib/FinancialContext';
+import Link from 'next/dist/client/link';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 export default function Page() {
     
@@ -24,6 +26,23 @@ export default function Page() {
       <div className="mx-auto max-w-4xl px-6 py-14 md:px-10">
         <FinancialScoreCard inputs={inputs} onChange={setInputs} />
       </div>
+    <div className="mt-16 flex justify-between">
+  <Link
+    href="/"
+    className="btn-secondary flex items-center gap-2"
+  >
+    <ArrowLeft className="h-4 w-4" />
+    Home
+  </Link>
+
+  <Link
+    href="/what-if"
+    className="btn-primary flex items-center gap-2"
+  >
+    Next: What-If
+    <ArrowRight className="h-4 w-4" />
+  </Link>
+</div>  
     </main>
   );
 }

@@ -23,7 +23,7 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10">
 
         {/* Logo */}
-        <Link href="/score" className="flex items-center gap-3">
+        <Link href="/" className="flex items-center gap-3">
           <img src="/logo.png" alt="FinPilot logo" width={40} height={40} className="rounded-xl" />
           <div>
             <p className="font-display text-base font-bold leading-none text-ink">FinPilot</p>

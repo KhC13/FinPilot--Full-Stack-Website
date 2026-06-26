@@ -2,6 +2,7 @@
 import Navbar from '@/components/Navbar';
 import SmartInsights from '@/components/SmartInsights';
 import { useFinancial } from '@/lib/FinancialContext';
+import Link from 'next/dist/client/link';
 
 export default function Page() {
   const { inputs } = useFinancial();
@@ -23,6 +24,15 @@ export default function Page() {
       <div className="mx-auto max-w-4xl px-6 py-14 md:px-10">
         <SmartInsights inputs={inputs} />
       </div>
+    <div className="mt-16 flex justify-between">
+  <Link href="/investment" className="btn-secondary">
+    ← Investment
+  </Link>
+
+  <Link href="/" className="btn-primary">
+    Home →
+  </Link>
+</div>  
     </main>
   );
 }
