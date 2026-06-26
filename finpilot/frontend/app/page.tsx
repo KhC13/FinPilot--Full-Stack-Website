@@ -104,7 +104,7 @@ export default function LandingPage() {
     }}
   />
   {/* Dark overlay — adjust opacity to taste (currently 80%) */}
-  <div className="pointer-events-none fixed inset-0 -z-10 bg-base-950/80" />
+  <div className="pointer-events-none fixed inset-0 -z-10 bg-base-950/60" />
 
       {/* ── Navbar ── */}
       <header className="sticky top-0 z-50 border-b border-glass-border bg-base-950/70 backdrop-blur-xl">
