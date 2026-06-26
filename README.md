@@ -1,129 +1,316 @@
-# FinPilot — Your Financial Co-Pilot
+# 🚀 FinPilot — Your Financial Co-Pilot
 
-A full-stack fintech dashboard with a glassmorphism, dark-themed UI. FinPilot scores your
-financial health, simulates how inflation affects future costs, builds a goal-based
-micro-investment plan, and surfaces rule-based smart insights — all backed by a small
-Express API.
+> **A modern full-stack personal finance platform that analyzes financial health, simulates future costs, generates investment plans, and provides actionable financial insights.**
 
-## Tech stack
 
-- **Frontend**: Next.js 14 (App Router) + TypeScript + Tailwind CSS + Recharts + lucide-react
-- **Backend**: Node.js + Express
-- **Fonts**: Sora (headings), Inter (body), JetBrains Mono (numeric/data), loaded via `next/font/google`
 
-## Project structure
 
-```
+\
+
+---
+
+# 🌐 Live Demo
+
+### Frontend
+
+https://fin-pilot-full-stack-website.vercel.app/
+
+### Backend API
+
+https://finpilot-backend-sd6y.onrender.com
+
+---
+
+# 📖 Overview
+
+FinPilot is a modern personal finance assistant that helps users understand and improve their financial health.
+
+Instead of only tracking expenses, FinPilot provides meaningful financial intelligence through:
+
+* Financial Health Score
+* What-If Financial Simulator
+* Inflation-aware Future Cost Calculator
+* Goal-based Investment Planner
+* AI-inspired Smart Financial Insights
+* Downloadable Financial Report
+
+The platform uses financial formulas commonly used by advisors and presents them through an intuitive dashboard.
+
+---
+
+# ✨ Features
+
+## 🟢 Financial Health Score
+
+Evaluate financial wellness using:
+
+* Monthly Income
+* Monthly Expenses
+* Current Savings
+* Total Debt
+
+Generates:
+
+* Overall Financial Score (0–100)
+* Savings Rate
+* Expense Ratio
+* Debt-to-Income Ratio
+* Emergency Fund Cushion
+* Financial Breakdown
+
+---
+
+## 🟡 What-If Simulator
+
+Instantly simulate scenarios like:
+
+* Increasing income
+* Reducing expenses
+* Increasing savings
+* Paying off debt
+
+See the updated Financial Health Score in real time without modifying original data.
+
+---
+
+## 🔵 Future Cost Simulator
+
+Predict future cost of goals such as:
+
+* House
+* Car
+* Education
+* Vacation
+
+Uses compound inflation to estimate future prices and visualizes the growth trend.
+
+---
+
+## 🟣 Micro-Investment Engine
+
+Plan investments based on:
+
+* Target Amount
+* Time Horizon
+* Expected Returns
+
+Calculates:
+
+* Daily Investment
+* Monthly SIP
+* Round-off Savings
+* Total Monthly Contribution
+* Portfolio Growth Projection
+
+---
+
+## 🟠 Smart Insights
+
+Automatically detects:
+
+* High Debt
+* Low Savings
+* Poor Emergency Fund
+* High Expense Ratio
+* Healthy Financial Habits
+
+Provides actionable suggestions instead of just displaying numbers.
+
+---
+
+## 📄 Download Financial Report
+
+Generate a downloadable PDF containing:
+
+* Financial Health Score
+* Metrics Summary
+* Future Cost Analysis
+* Investment Plan
+* Smart Insights
+
+---
+
+# 🖥️ Tech Stack
+
+## Frontend
+
+* Next.js 16
+* TypeScript
+* React
+* Tailwind CSS
+* Lucide Icons
+* Context API
+
+## Backend
+
+* Node.js
+* Express.js
+
+## Deployment
+
+* Vercel (Frontend)
+* Render (Backend)
+
+---
+
+# 🏗️ Project Architecture
+
+```text
 finpilot/
-├── backend/                   # Express API
-│   ├── controllers/           # Request handlers
-│   ├── routes/                # Route definitions
-│   ├── utils/calculations.js  # Core financial math (score, inflation, SIP, insights)
-│   ├── server.js              # App entry point
-│   └── package.json
 │
-└── frontend/                  # Next.js app
-    ├── app/
-    │   ├── layout.tsx         # Root layout, fonts, ambient background
-    │   ├── page.tsx           # Dashboard page (assembles all sections)
-    │   └── globals.css        # Design tokens, glass utilities
-    ├── components/
-    │   ├── Navbar.tsx
-    │   ├── GlassCard.tsx          # Reusable frosted-glass card + header
-    │   ├── ScoreRing.tsx          # Animated circular score gauge (signature element)
-    │   ├── FinancialScoreCard.tsx # Section 1: Financial Health Score
-    │   ├── FutureCostSimulator.tsx# Section 2: Future Cost Simulator
-    │   ├── InvestmentEngine.tsx   # Section 3: Micro-Investment Engine
-    │   └── SmartInsights.tsx      # Section 4: Smart Insights
-    ├── lib/
-    │   ├── api.ts              # Typed client for the backend API
-    │   └── format.ts           # Currency/number formatting helpers
-    ├── tailwind.config.ts       # Glassmorphism design tokens
-    └── package.json
+├── backend/
+│   ├── controllers/
+│   ├── routes/
+│   ├── utils/
+│   │   └── calculations.js
+│   ├── server.js
+│   ├── package.json
+│   └── .env.example
+│
+├── frontend/
+│   │
+│   ├── app/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── score/
+│   │   ├── what-if/
+│   │   ├── future-cost/
+│   │   ├── investment/
+│   │   ├── insights/
+│   │   └── globals.css
+│   │
+│   ├── components/
+│   │   ├── Navbar.tsx
+│   │   ├── LandingPage.tsx
+│   │   ├── PageNavigation.tsx
+│   │   ├── DownloadReportButton.tsx
+│   │   ├── GlassCard.tsx
+│   │   ├── ScoreRing.tsx
+│   │   ├── FinancialScoreCard.tsx
+│   │   ├── WhatIfSimulator.tsx
+│   │   ├── FutureCostSimulator.tsx
+│   │   ├── InvestmentEngine.tsx
+│   │   └── SmartInsights.tsx
+│   │
+│   ├── lib/
+│   │   ├── api.ts
+│   │   ├── FinancialContext.tsx
+│   │   └── format.ts
+│   │
+│   ├── public/
+│   │   ├── logo.png
+│   │   ├── hero-bg.png
+│   │   ├── score.png
+│   │   ├── compare.png
+│   │   ├── cost.png
+│   │   ├── invest.png
+│   │   └── insights.png
+│   │    
+│   ├── tailwind.config.ts
+│   ├── next.config.ts
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── README.md
+└── LICENSE
 ```
 
-## Setup
+---
 
-### 1. Backend
+# ⚙️ Installation
+
+## Clone Repository
+
+```bash
+git clone https://github.com/KhC13/FinPilot--Full-Stack-Website.git
+```
+
+---
+
+## Backend
 
 ```bash
 cd backend
 npm install
-cp .env.example .env
-npm run dev        # nodemon, http://localhost:5000
-# or: npm start
+npm start
 ```
 
-### 2. Frontend
+Runs on:
+
+```
+http://localhost:5000
+```
+
+---
+
+## Frontend
 
 ```bash
 cd frontend
 npm install
-cp .env.local.example .env.local
-npm run dev         # http://localhost:3000
+npm run dev
 ```
 
-The frontend proxies `/api/*` requests to the backend via `next.config.js` rewrites, so no CORS
-configuration is needed in dev. `NEXT_PUBLIC_API_URL` controls the proxy target (defaults to
-`http://localhost:5000`).
+Runs on:
 
-Open `http://localhost:3000` — the dashboard loads with example numbers prefilled, and every
-section recalculates live as you edit inputs.
+```
+http://localhost:3000
+```
 
-> Note: the frontend build fetches Sora, Inter, and JetBrains Mono from Google Fonts at build
-> time via `next/font/google`. Make sure the machine running `npm run build` / `npm run dev` has
-> outbound internet access to `fonts.googleapis.com` and `fonts.gstatic.com`.
+---
 
-## API reference
+# 🔌 API Endpoints
 
-All endpoints accept/return JSON.
+| Method | Endpoint           | Description                      |
+| ------ | ------------------ | -------------------------------- |
+| POST   | `/api/score`       | Calculate Financial Health Score |
+| POST   | `/api/future-cost` | Predict Future Cost              |
+| POST   | `/api/investment`  | Generate Investment Plan         |
+| POST   | `/api/insights`    | Generate Smart Insights          |
 
-### `POST /api/score`
-**Body:** `{ income, expenses, savings, debt }` (monthly figures, debt = total outstanding)
-**Returns:** `{ score, label, tone, breakdown, metrics, topInsights }`
+---
 
-### `POST /api/future-cost`
-**Body:** `{ cost, years, inflation }` (inflation in %, default 6 if omitted)
-**Returns:** `{ series: [{ year, label, value }], summary }`
+# 🎨 UI Highlights
 
-### `POST /api/investment`
-**Body:** `{ goalAmount, years, expectedReturn, monthlyExpenseTransactions?, avgRoundOff? }`
-**Returns:** `{ inputs, plan: { dailyInvestment, monthlyInvestment, monthlyRoundOffSavings, yearlyRoundOffSavings, totalMonthlyContribution }, growthSeries }`
+* Glassmorphism Design
+* Responsive Layout
+* Animated Score Ring
+* Gradient Backgrounds
+* Custom Icons
+* Interactive Cards
+* Multi-page Navigation
+* Downloadable Reports
 
-### `POST /api/insights`
-**Body:** `{ income, expenses, savings, debt }`
-**Returns:** `{ insights: [{ type, severity, title, message }] }`
+---
 
-## Design system
+# 🚀 Future Improvements
 
-Defined in `frontend/tailwind.config.ts` and `frontend/app/globals.css`:
+* User Authentication
+* Secure Database Integration
+* Expense Tracker
+* AI Chat Financial Advisor
+* Goal Progress Dashboard
+* Investment Portfolio Tracking
+* Expense Categorization
+* Multi-Currency Support
+* Tax Planning Module
+* Dark / Light Theme
+* Email Report Delivery
+* Mobile App Version
 
-- **Palette**: deep navy base (`#05060F`), glass surfaces at 6–10% white opacity, gradient
-  accent purple → blue → cyan (`#8B5CF6 → #3B82F6 → #22D3EE`), semantic success/warning/danger.
-- **Typography**: Sora for headings, Inter for body copy, JetBrains Mono for all currency and
-  numeric values (keeps figures legible and tabular).
-- **Components**: `.glass-card`, `.glass-panel`, `.btn-primary`, `.btn-ghost`, `.input-field`,
-  `.gradient-text` utility classes encapsulate the glassmorphism look so every section stays
-  visually consistent.
-- **Signature element**: the circular score ring (`ScoreRing.tsx`) — a gradient-stroked SVG gauge
-  with an animated count-up and a tone-tinted ambient glow that reflects financial health at a
-  glance.
+---
 
-## Features
+# 👩‍💻 Author
 
-- Financial Health Score Analysis
-- Future Cost Prediction (Inflation-based)
-- Micro-Investment Planning
-- What-If Financial Simulator 
-- PDF Report Generation 
-- Interactive Charts & Insights
+**Khushi Chhakara**
 
+GitHub:
+https://github.com/KhC13
 
-## Notes
+---
 
-- The "smart insights" engine is intentionally rule-based (see `backend/utils/calculations.js`)
-  so it's transparent and fast — it's structured so a real ML model could be swapped in later
-  without changing the API shape.
-- This is a demo application; figures and recommendations are illustrative and not financial
-  advice.
+# ⭐ Support
 
+If you found this project useful, consider giving it a ⭐ on GitHub.
+
+It motivates me to build more open-source projects.
