@@ -9,7 +9,7 @@ export default function Page() {
   <div
     className="pointer-events-none fixed inset-0 -z-10"
     style={{
-      backgroundImage: 'url(/cost.png)',
+      backgroundImage: 'url(/costs.png)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed'

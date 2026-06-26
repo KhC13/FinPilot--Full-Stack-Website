@@ -11,7 +11,7 @@ export default function Page() {
   <div
     className="pointer-events-none fixed inset-0 -z-10"
     style={{
-      backgroundImage: 'url(/insights.png)',
+      backgroundImage: 'url(/insi.png)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundAttachment: 'fixed'
