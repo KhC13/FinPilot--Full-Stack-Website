@@ -1,4 +1,4 @@
-# 🚀 FinPilot — Your Financial Co-Pilot
+# FinPilot — Your Financial Co-Pilot
 
 > **A modern full-stack personal finance platform that analyzes financial health, simulates future costs, generates investment plans, and provides actionable financial insights.**
 
@@ -9,7 +9,7 @@
 
 ---
 
-# 🌐 Live Demo
+# Live Demo
 
 ### Frontend
 
@@ -21,7 +21,7 @@ https://finpilot-backend-sd6y.onrender.com
 
 ---
 
-# 📖 Overview
+# Overview
 
 FinPilot is a modern personal finance assistant that helps users understand and improve their financial health.
 
@@ -38,9 +38,9 @@ The platform uses financial formulas commonly used by advisors and presents them
 
 ---
 
-# ✨ Features
+# Features
 
-## 🟢 Financial Health Score
+## Financial Health Score
 
 Evaluate financial wellness using:
 
@@ -60,7 +60,7 @@ Generates:
 
 ---
 
-## 🟡 What-If Simulator
+## What-If Simulator
 
 Instantly simulate scenarios like:
 
@@ -73,7 +73,7 @@ See the updated Financial Health Score in real time without modifying original d
 
 ---
 
-## 🔵 Future Cost Simulator
+## Future Cost Simulator
 
 Predict future cost of goals such as:
 
@@ -86,7 +86,7 @@ Uses compound inflation to estimate future prices and visualizes the growth tren
 
 ---
 
-## 🟣 Micro-Investment Engine
+## Micro-Investment Engine
 
 Plan investments based on:
 
@@ -104,7 +104,7 @@ Calculates:
 
 ---
 
-## 🟠 Smart Insights
+## Smart Insights
 
 Automatically detects:
 
@@ -118,7 +118,7 @@ Provides actionable suggestions instead of just displaying numbers.
 
 ---
 
-## 📄 Download Financial Report
+## Download Financial Report
 
 Generate a downloadable PDF containing:
 
@@ -130,7 +130,7 @@ Generate a downloadable PDF containing:
 
 ---
 
-# 🖥️ Tech Stack
+# Tech Stack
 
 ## Frontend
 
@@ -153,7 +153,7 @@ Generate a downloadable PDF containing:
 
 ---
 
-# 🏗️ Project Architecture
+# Project Architecture
 
 ```text
 finpilot/
@@ -217,7 +217,7 @@ finpilot/
 
 ---
 
-# ⚙️ Installation
+# Installation
 
 ## Clone Repository
 
@@ -259,7 +259,7 @@ http://localhost:3000
 
 ---
 
-# 🔌 API Endpoints
+# API Endpoints
 
 | Method | Endpoint           | Description                      |
 | ------ | ------------------ | -------------------------------- |
@@ -270,7 +270,7 @@ http://localhost:3000
 
 ---
 
-# 🎨 UI Highlights
+# UI Highlights
 
 * Glassmorphism Design
 * Responsive Layout
@@ -283,7 +283,7 @@ http://localhost:3000
 
 ---
 
-# 🚀 Future Improvements
+# Future Improvements
 
 * User Authentication
 * Secure Database Integration
@@ -300,7 +300,7 @@ http://localhost:3000
 
 ---
 
-# 👩‍💻 Author
+# Author
 
 **Khushi Chhakara**
 
@@ -309,7 +309,7 @@ https://github.com/KhC13
 
 ---
 
-# ⭐ Support
+# Support
 
 If you found this project useful, consider giving it a ⭐ on GitHub.
 
