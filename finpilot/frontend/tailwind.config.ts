@@ -42,8 +42,8 @@ const config: Config = {
         mono: ['var(--font-jetbrains)', 'monospace']
       },
       backgroundImage: {
-        'gradient-primary': 'linear-gradient(135deg, #8B5CF6 0%, #3B82F6 55%, #22D3EE 100%)',
-        'gradient-radial-glow': 'radial-gradient(circle at center, rgba(139,92,246,0.25) 0%, rgba(34,211,238,0) 70%)',
+        'gradient-primary': 'linear-gradient(135deg, #f00000 0%, #da7721 55%, #c2bf3a 100%)',
+        'gradient-radial-glow': 'radial-gradient(circle at center, rgba(4, 4, 4, 0.25) 0%, rgba(34,211,238,0) 70%)',
         'gradient-card': 'linear-gradient(160deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)'
       },
       boxShadow: {

@@ -95,14 +95,17 @@ export default function LandingPage() {
     <main className="relative min-h-screen">
   {/* Background image with dark overlay so text stays readable */}
   <div
-    className="pointer-events-none fixed inset-0 -z-10"
+    className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+  <div
+    className="bg-breathe h-full w-full"
     style={{
       backgroundImage: 'url(/hero-bg.png)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
-      backgroundAttachment: 'fixed'
+      transformOrigin: 'center center'
     }}
   />
+</div>
   {/* Dark overlay — adjust opacity to taste (currently 80%) */}
   <div className="pointer-events-none fixed inset-0 -z-10 bg-base-950/60" />
 
@@ -124,8 +127,10 @@ export default function LandingPage() {
             <Link href="/future-cost" className="transition-colors hover:text-ink">Future Cost</Link>
             <Link href="/investment" className="transition-colors hover:text-ink">Investments</Link>
             <Link href="/insights" className="transition-colors hover:text-ink">Insights</Link>
+            <Link href="/expenses" className="transition-colors hover:text-ink">Expenses</Link>
+            <Link href="/chat" className="transition-colors hover:text-ink">AI Advisor</Link>
           </nav>
-          <Link href="/score" className="btn-primary !px-4 !py-2 text-xs">Get Started</Link>
+          <Link href="/score" className="btn-primary  !px-4 !py-2 text-xs">Get Started</Link>
         </div>
       </header>
 

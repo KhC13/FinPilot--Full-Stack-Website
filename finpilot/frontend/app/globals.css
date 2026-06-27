@@ -65,7 +65,7 @@
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-primary px-5 py-2.5
       font-display text-sm font-semibold text-white shadow-glow transition-all duration-300
-      hover:scale-[1.03] hover:shadow-glow active:scale-[0.98];
+      hover:scale-[1.13] hover:shadow-glow active:scale-[0.98];
   }
 
   .btn-ghost {
@@ -101,4 +101,13 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+}
+
+@keyframes bg-breathe {
+  0%, 100% { transform: scale(1);    }
+  25%       { transform: scale(1.09); }
+}
+
+.bg-breathe {
+  animation: bg-breathe 5s ease-in-out infinite;
 }
