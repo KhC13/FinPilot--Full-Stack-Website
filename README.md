@@ -287,7 +287,6 @@ http://localhost:3000
 
 * User Authentication
 * Secure Database Integration
-* Expense Tracker
 * AI Chat Financial Advisor
 * Goal Progress Dashboard
 * Investment Portfolio Tracking
