@@ -88,6 +88,11 @@ export const authApi = {
     localStorage.removeItem('fp_token');
     localStorage.removeItem('fp_user');
   },
+  
+  getToken: (): string | null => {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('fp_token');
+  }, 
 
   getStoredUser: (): AuthUser | null => {
     if (typeof window === 'undefined') return null;

@@ -127,8 +127,6 @@ export default function LandingPage() {
             <Link href="/future-cost" className="transition-colors hover:text-ink">Future Cost</Link>
             <Link href="/investment" className="transition-colors hover:text-ink">Investments</Link>
             <Link href="/insights" className="transition-colors hover:text-ink">Insights</Link>
-            <Link href="/expenses" className="transition-colors hover:text-ink">Expenses</Link>
-            <Link href="/chat" className="transition-colors hover:text-ink">AI Advisor</Link>
           </nav>
           <Link href="/score" className="btn-primary  !px-4 !py-2 text-xs">Get Started</Link>
         </div>

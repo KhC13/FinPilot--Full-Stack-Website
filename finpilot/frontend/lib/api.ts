@@ -1,13 +1,13 @@
 // Lightweight API client for the FinPilot backend.
-// Uses Next.js rewrites (see next.config.js) so calls to /api/* are
-// proxied to the Express server — no CORS headaches in dev.
 
-const BASE =
-  process.env.NEXT_PUBLIC_API_URL ||
-  "https://finpilot-backend-sd6y.onrender.com";
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
 async function postJSON<T>(path: string, body: object): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
+  const cleanPath = path.startsWith('/api') ? path.slice(4) : path;
+  const url = `${API_BASE_URL}${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`;
+
+  const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
@@ -79,11 +79,12 @@ export interface Insight {
   message: string;
 }
 
+// Existing Calculations & Public Tool API Endpoints
 export const api = {
-  getScore: (inputs: FinancialInputs) => postJSON<ScoreResponse>('/api/score', inputs),
+  getScore: (inputs: FinancialInputs) => postJSON<ScoreResponse>('/score', inputs),
 
   getFutureCost: (params: { cost: number; years: number; inflation: number }) =>
-    postJSON<FutureCostResponse>('/api/future-cost', params),
+    postJSON<FutureCostResponse>('/future-cost', params),
 
   getInvestmentPlan: (params: {
     goalAmount: number;
@@ -91,7 +92,59 @@ export const api = {
     expectedReturn: number;
     monthlyExpenseTransactions?: number;
     avgRoundOff?: number;
-  }) => postJSON<InvestmentResponse>('/api/investment', params),
+  }) => postJSON<InvestmentResponse>('/investment', params),
 
-  getInsights: (inputs: FinancialInputs) => postJSON<{ insights: Insight[] }>('/api/insights', inputs)
+  getInsights: (inputs: FinancialInputs) => postJSON<{ insights: Insight[] }>('/insights', inputs)
+};
+
+// Private Auth & Token Management API
+export const authApi = {
+  getToken: (): string | null => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('fp_token');
+    }
+    return null;
+  },
+
+  setToken: (token: string): void => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('fp_token', token);
+    }
+  },
+
+  removeToken: (): void => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('fp_token');
+    }
+  },
+
+  isAuthenticated: (): boolean => {
+    return !!authApi.getToken();
+  },
+
+  login: async (credentials: any) => {
+    const res = await fetch(`${API_BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    });
+    return res.json();
+  },
+
+  register: async (userData: any) => {
+    const res = await fetch(`${API_BASE_URL}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData),
+    });
+    return res.json();
+  },
+
+  getProfile: async () => {
+    const token = authApi.getToken();
+    const res = await fetch(`${API_BASE_URL}/auth/me`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.json();
+  }
 };

@@ -2,20 +2,19 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Compass, Receipt, MessageCircle, LogOut, User, ChevronDown } from 'lucide-react';
+import { Compass, LogOut, User, ChevronDown } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import DownloadReportButton from '@/components/DownloadReportButton';
 import { useFinancial } from '@/lib/FinancialContext';
 import { authApi, AuthUser } from '@/lib/authApi';
 
 const navLinks = [
-  { href: '/score',       label: 'Health Score', },
-  { href: '/what-if',     label: 'What-If',},
-  { href: '/future-cost', label: 'Future Cost', },
-  { href: '/investment',  label: 'Investments', },
-  { href: '/insights',    label: 'Insights', },
-  { href: '/expenses',    label: 'Expenses', icon: Receipt },
-  { href: '/chat',        label: 'AI Advisor', icon: MessageCircle },
+  { href: '/score', label: 'Health Score' },
+  { href: '/what-if', label: 'What-If' },
+  { href: '/future-cost', label: 'Future Cost' },
+  { href: '/investment', label: 'Investments' },
+  { href: '/goals', label: 'Goals' },
+  { href: '/insights', label: 'Insights' },
 ];
 
 export default function Navbar() {
@@ -60,21 +59,23 @@ export default function Navbar() {
         </Link>
 
         {/* Nav links */}
-        <nav className="hidden items-center gap-5 font-body text-sm font-medium text-ink-muted lg:flex">
-          {navLinks.map(({ href, label, icon: Icon }) => {
-            const active = pathname === href;
-            return (
-              <Link
-                key={href}
-                href={href}
-                className={`flex items-center gap-1.5 transition-colors hover:text-ink ${active ? 'text-ink font-semibold' : ''}`}
-              >
-                {Icon && <Icon className="h-3.5 w-3.5" />}
-                {label}
-              </Link>
-            );
-          })}
-        </nav>
+<nav className="hidden items-center gap-5 font-body text-sm font-medium text-ink-muted lg:flex">
+  {navLinks.map(({ href, label }) => {
+    const active = pathname === href;
+
+    return (
+      <Link
+        key={href}
+        href={href}
+        className={`flex items-center gap-1.5 transition-colors hover:text-ink ${
+          active ? 'text-ink font-semibold' : ''
+        }`}
+      >
+        {label}
+      </Link>
+    );
+  })}
+</nav>
 
         {/* Right side */}
         <div className="flex items-center gap-3">
@@ -100,20 +101,6 @@ export default function Navbar() {
                     <p className="text-xs font-semibold text-ink">{user.name}</p>
                     <p className="text-[11px] text-ink-faint truncate">{user.email}</p>
                   </div>
-                  <Link
-                    href="/expenses"
-                    onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ink-muted transition-colors hover:bg-glass hover:text-ink"
-                  >
-                    <Receipt className="h-4 w-4" /> Expense Tracker
-                  </Link>
-                  <Link
-                    href="/chat"
-                    onClick={() => setMenuOpen(false)}
-                    className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-ink-muted transition-colors hover:bg-glass hover:text-ink"
-                  >
-                    <MessageCircle className="h-4 w-4" /> AI Advisor
-                  </Link>
                   <div className="mt-1 border-t border-glass-border pt-1">
                     <button
                       onClick={handleLogout}
