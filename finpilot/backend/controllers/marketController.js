@@ -51,7 +51,7 @@ exports.getStockPrices = async (req, res) => {
         .filter(Boolean);
     }
 
-    symbols = [...new Set(symbols)].slice(0, 30);
+    symbols = [...new Set(symbols)];
 
     if (!symbols.length) {
       return res.status(400).json({
@@ -71,6 +71,29 @@ exports.getStockPrices = async (req, res) => {
     return res.status(502).json({
       success: false,
       error: error.message || 'Unable to fetch stock prices',
+    });
+  }
+};
+
+exports.searchStocks = async (req, res) => {
+  try {
+    const query = String(req.query.q || '').trim();
+
+    if (query.length < 2) {
+      return res.json({ success: true, source: 'yahoo-finance', data: [] });
+    }
+
+    const data = await runPython(['search', query]);
+
+    return res.json({
+      success: true,
+      source: 'yahoo-finance',
+      data,
+    });
+  } catch (error) {
+    return res.status(502).json({
+      success: false,
+      error: error.message || 'Unable to search stocks',
     });
   }
 };

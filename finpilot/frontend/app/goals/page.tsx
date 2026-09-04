@@ -120,26 +120,7 @@ export default function GoalsPage() {
     return { progress, remaining, requiredMonthly, status, monthsRemaining };
   };
 
-  if (!loading && isAuthenticated === false) {
-    return (
-      <div className="min-h-screen bg-[#0a0b10] text-white">
-        <Navbar />
-        <div className="flex flex-col items-center justify-center h-[80vh] space-y-4">
-          <div className="glass-panel p-8 rounded-xl text-center space-y-4 max-w-md">
-            <AlertCircle className="w-12 h-12 text-amber-400 mx-auto" />
-            <h2 className="text-2xl font-bold">Authentication Required</h2>
-            <p className="text-slate-400 text-sm">Please login before accessing your financial goals.</p>
-            <button 
-              onClick={() => router.push('/login')} 
-              className="btn-primary w-full py-2.5 font-semibold rounded-lg"
-            >
-              Go to Login
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+ 
 
   if (loading) return <div className="min-h-screen bg-[#0a0b10] text-white flex items-center justify-center">Loading your financial goals...</div>;
 

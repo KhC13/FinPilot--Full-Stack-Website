@@ -1,6 +1,7 @@
 import sys
 import json
 import yfinance as yf
+import requests
 
 INDEX_SYMBOLS = {
     "nifty50": "^NSEI",
@@ -39,6 +40,52 @@ def normalize_symbol(symbol):
     if not s.endswith(".NS") and not s.endswith(".BO") and not s.startswith("^"):
         s = f"{s}.NS"
     return s
+
+def search_stocks(query):
+    q = query.strip()
+    if len(q) < 2:
+        return []
+
+    url = "https://query2.finance.yahoo.com/v1/finance/search"
+    headers = {"User-Agent": "Mozilla/5.0"}
+
+    response = requests.get(
+        url,
+        params={"q": q, "quotesCount": 20, "newsCount": 0},
+        headers=headers,
+        timeout=10,
+    )
+    response.raise_for_status()
+    payload = response.json()
+
+    results = []
+    seen = set()
+
+    for item in payload.get("quotes", []):
+        symbol = str(item.get("symbol", "")).upper().strip()
+        quote_type = str(item.get("quoteType", "")).upper()
+
+        # FinPilot currently targets Indian listed equities.
+        if quote_type not in {"EQUITY", "ETF"}:
+            continue
+        if not (symbol.endswith(".NS") or symbol.endswith(".BO")):
+            continue
+        if symbol in seen:
+            continue
+
+        seen.add(symbol)
+        results.append({
+            "symbol": symbol,
+            "displaySymbol": symbol.replace(".NS", "").replace(".BO", ""),
+            "name": item.get("shortname") or item.get("longname") or symbol,
+            "exchange": item.get("exchange") or ("NSE" if symbol.endswith(".NS") else "BSE"),
+            "quoteType": quote_type,
+        })
+
+        if len(results) >= 12:
+            break
+
+    return results
 
 def history(symbol, range_name):
     periods = {
@@ -96,6 +143,15 @@ def main():
                     "symbol": symbol,
                 }
         print(json.dumps(result))
+        return
+
+    if mode == "search":
+        query = sys.argv[2] if len(sys.argv) > 2 else ""
+        try:
+            print(json.dumps(search_stocks(query)))
+        except Exception as error:
+            print(json.dumps({"error": str(error)}))
+            sys.exit(1)
         return
 
     if mode == "history":

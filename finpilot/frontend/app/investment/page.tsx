@@ -17,12 +17,12 @@ import {
   PieChart as PieIcon,
   Plus,
   RefreshCw,
+  Search,
   Sparkles,
   Trash2,
   TrendingDown,
   TrendingUp,
   Wallet,
-  LineChart
 } from 'lucide-react';
 import {
   Bar,
@@ -35,6 +35,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  LineChart,
 } from 'recharts';
 
 interface Holding {
@@ -56,6 +57,14 @@ interface MarketItem {
 
 type MarketData = Record<string, MarketItem>;
 
+interface StockSearchResult {
+  symbol: string;
+  displaySymbol: string;
+  name: string;
+  exchange: string;
+  quoteType: string;
+}
+
 const allocationClasses = [
   'bg-emerald-500',
   'bg-blue-500',
@@ -63,6 +72,9 @@ const allocationClasses = [
   'bg-violet-500',
   'bg-pink-500',
 ];
+
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 export default function InvestmentsPage() {
   const router = useRouter();
@@ -76,12 +88,17 @@ export default function InvestmentsPage() {
   const [priceLoading, setPriceLoading] = useState(false);
   const [reliancePrice, setReliancePrice] = useState<number | null>(null);
   const [priceError, setPriceError] = useState('');
+  const [stockChartSymbol, setStockChartSymbol] = useState('RELIANCE');
   const [stockRange, setStockRange] = useState('1M');
   const [stockHistory, setStockHistory] = useState<
     { date: string; price: number }[]
   >([]);
   const [stockHistoryLoading, setStockHistoryLoading] = useState(false);
   const [stockHistoryError, setStockHistoryError] = useState('');
+  const [stockSearchQuery, setStockSearchQuery] = useState('');
+  const [stockSearchResults, setStockSearchResults] = useState<StockSearchResult[]>([]);
+  const [stockSearchLoading, setStockSearchLoading] = useState(false);
+  const [stockSearchOpen, setStockSearchOpen] = useState(false);
 
   // Add investment form
   const [symbol, setSymbol] = useState('RELIANCE');
@@ -94,7 +111,7 @@ export default function InvestmentsPage() {
   const [availableAmount, setAvailableAmount] = useState(50000);
   const [monthlyInvestment, setMonthlyInvestment] = useState(10000);
   const [riskTolerance, setRiskTolerance] =
-  useState<'Low' | 'Moderate' | 'High'>('Moderate');
+    useState<'Low' | 'Moderate' | 'High'>('Moderate');
   const [expectedReturn, setExpectedReturn] = useState(12);
   const [horizon, setHorizon] = useState(10);
   const [initInv, setInitInv] = useState(100000);
@@ -102,7 +119,7 @@ export default function InvestmentsPage() {
   const fetchPortfolio = async () => {
     try {
       const token = authApi.getToken();
-      const res = await fetch('/api/portfolio', {
+      const res = await fetch(`${API_BASE_URL}/portfolio`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -131,7 +148,7 @@ export default function InvestmentsPage() {
       try {
         const symbols = [...new Set(equitySymbols)].join(',');
         const priceRes = await fetch(
-          `http://localhost:5000/api/market/prices?symbols=${encodeURIComponent(symbols)}`
+          `${API_BASE_URL}/market/prices?symbols=${encodeURIComponent(symbols)}`
         );
         const priceData = await priceRes.json();
 
@@ -168,13 +185,15 @@ export default function InvestmentsPage() {
     }
   };
 
-  const fetchStockHistory = async (range = stockRange) => {
+  const fetchStockHistory = async (symbolValue = stockChartSymbol, range = stockRange) => {
     try {
       setStockHistoryLoading(true);
       setStockHistoryError('');
 
       const res = await fetch(
-        `http://localhost:5000/api/market/history?symbol=RELIANCE&range=${range}`
+        `${API_BASE_URL}/market/history?symbol=${encodeURIComponent(
+          symbolValue
+        )}&range=${encodeURIComponent(range)}`
       );
       const data = await res.json();
 
@@ -185,7 +204,7 @@ export default function InvestmentsPage() {
       setStockHistory(data.data || []);
     } catch (err) {
       console.error('Stock history fetch error:', err);
-      setStockHistoryError('Unable to load RELIANCE price history.');
+      setStockHistoryError(`Unable to load ${symbolValue} price history.`);
       setStockHistory([]);
     } finally {
       setStockHistoryLoading(false);
@@ -196,7 +215,7 @@ export default function InvestmentsPage() {
     try {
       setRefreshing(true);
 
-      const res = await fetch('http://localhost:5000/api/market/overview');
+      const res = await fetch(`${API_BASE_URL}/market/overview`);
       const data = await res.json();
 
       if (data.success) {
@@ -227,7 +246,6 @@ export default function InvestmentsPage() {
 
     fetchPortfolio();
     fetchMarket();
-    fetchStockHistory();
 
     // Keep polling, but only once per minute.
     const interval = setInterval(fetchMarket, 60 * 1000);
@@ -235,10 +253,65 @@ export default function InvestmentsPage() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchStockHistory(stockChartSymbol, stockRange);
+    }
+  }, [stockChartSymbol, stockRange, isAuthenticated]);
+
+  useEffect(() => {
+    if (!isAuthenticated || stockSearchQuery.trim().length < 2) {
+      setStockSearchResults([]);
+      setStockSearchLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      try {
+        setStockSearchLoading(true);
+        const res = await fetch(
+          `${API_BASE_URL}/market/search?q=${encodeURIComponent(stockSearchQuery.trim())}`,
+          { signal: controller.signal }
+        );
+        const data = await res.json();
+
+        if (!data.success) {
+          throw new Error(data.error || 'Unable to search stocks');
+        }
+
+        setStockSearchResults(data.data || []);
+        setStockSearchOpen(true);
+      } catch (err) {
+        if ((err as Error).name !== 'AbortError') {
+          console.error('Stock search error:', err);
+          setStockSearchResults([]);
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setStockSearchLoading(false);
+        }
+      }
+    }, 350);
+
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [stockSearchQuery, isAuthenticated]);
+
+  const selectStock = (result: StockSearchResult) => {
+    const selected = result.displaySymbol || result.symbol;
+    setStockChartSymbol(selected);
+    setStockSearchQuery('');
+    setStockSearchResults([]);
+    setStockSearchOpen(false);
+  };
+
   const handleRefresh = async () => {
     await fetchPortfolio();
     await fetchMarket();
-    await fetchStockHistory(stockRange);
+    await fetchStockHistory(stockChartSymbol, stockRange);
   };
 
   const handleAddHolding = async (e: React.FormEvent) => {
@@ -247,7 +320,7 @@ export default function InvestmentsPage() {
     const token = authApi.getToken();
 
     try {
-      const res = await fetch('/api/portfolio', {
+      const res = await fetch(`${API_BASE_URL}/portfolio`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -280,7 +353,7 @@ export default function InvestmentsPage() {
     const token = authApi.getToken();
 
     try {
-      await fetch(`/api/portfolio/${id}`, {
+      await fetch(`${API_BASE_URL}/portfolio/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -397,28 +470,7 @@ export default function InvestmentsPage() {
     { key: 'bankNifty', label: 'NIFTY BANK', exchange: 'NSE' },
   ];
 
-  if (!loading && isAuthenticated === false) {
-    return (
-      <div className="min-h-screen bg-[#070b12] text-white">
-        <Navbar />
-        <div className="flex min-h-[80vh] items-center justify-center px-6">
-          <div className="glass-panel w-full max-w-md rounded-2xl p-8 text-center">
-            <AlertTriangle className="mx-auto mb-4 h-12 w-12 text-amber-400" />
-            <h2 className="text-2xl font-bold">Authentication Required</h2>
-            <p className="mt-2 text-sm text-slate-400">
-              Login to track your portfolio, investments and market insights.
-            </p>
-            <button
-              onClick={() => router.push('/signin')}
-              className="btn-primary mt-6 w-full rounded-lg py-3 font-semibold"
-            >
-              Go to Login
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  
 
   return (
     <div className="min-h-screen bg-[#070b12] text-white">
@@ -542,43 +594,112 @@ export default function InvestmentsPage() {
           )}
         </section>
 
-        {/* RELIANCE Stock Chart */}
+        {/* Dynamic Stock Chart */}
         <section className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <div className="flex items-center gap-2">
                 <LineChartIcon className="h-5 w-5 text-emerald-400" />
-                <h2 className="text-xl font-bold">RELIANCE Price Chart</h2>
+                <h2 className="text-xl font-bold">
+                  {stockChartSymbol} Price Chart
+                </h2>
               </div>
               <p className="text-sm text-slate-500">
-                Historical RELIANCE price movement from Yahoo Finance
+                Historical {stockChartSymbol} price movement from Yahoo Finance
               </p>
             </div>
 
-            <div className="flex items-center gap-1 rounded-xl border border-slate-800 bg-slate-950/60 p-1">
-              {['1D', '1W', '1M', '6M', '1Y'].map((range) => (
-                <button
-                  key={range}
-                  onClick={() => {
-                    setStockRange(range);
-                    fetchStockHistory(range);
-                  }}
-                  className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
-                    stockRange === range
-                      ? 'bg-emerald-500 text-slate-950'
-                      : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-                  }`}
-                >
-                  {range}
-                </button>
-              ))}
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="relative w-full sm:w-[340px]">
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+                  <input
+                    value={stockSearchQuery}
+                    onChange={(e) => setStockSearchQuery(e.target.value)}
+                    onFocus={() => {
+                      if (stockSearchResults.length > 0) setStockSearchOpen(true);
+                    }}
+                    placeholder="Search any Indian stock..."
+                    className="input-field w-full pl-9 pr-9"
+                  />
+                  {stockSearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setStockSearchQuery('');
+                        setStockSearchResults([]);
+                        setStockSearchOpen(false);
+                      }}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+
+                {stockSearchOpen && stockSearchQuery.trim().length >= 2 && (
+                  <div className="absolute z-30 mt-2 max-h-72 w-full overflow-y-auto rounded-2xl border border-slate-800 bg-slate-950 shadow-2xl">
+                    {stockSearchLoading ? (
+                      <div className="px-4 py-4 text-sm text-slate-400">
+                        Searching stocks...
+                      </div>
+                    ) : stockSearchResults.length > 0 ? (
+                      stockSearchResults.map((result) => (
+                        <button
+                          key={result.symbol}
+                          type="button"
+                          onClick={() => selectStock(result)}
+                          className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-slate-900"
+                        >
+                          <div className="min-w-0">
+                            <p className="font-semibold text-white">
+                              {result.displaySymbol}
+                            </p>
+                            <p className="truncate text-xs text-slate-500">
+                              {result.name}
+                            </p>
+                          </div>
+                          <span className="shrink-0 text-xs text-emerald-400">
+                            {result.exchange}
+                          </span>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-4 py-4 text-sm text-slate-400">
+                        No supported Indian stock found. Try a ticker like TCS, INFY or HDFCBANK.
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-950/60 px-3 py-2 text-sm">
+                <span className="text-slate-500">Viewing</span>
+                <span className="font-bold text-white">{stockChartSymbol}</span>
+              </div>
+
+              <div className="flex items-center gap-1 rounded-xl border border-slate-800 bg-slate-950/60 p-1">
+                {['1D', '1W', '1M', '6M', '1Y'].map((range) => (
+                  <button
+                    key={range}
+                    onClick={() => setStockRange(range)}
+                    className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+                      stockRange === range
+                        ? 'bg-emerald-500 text-slate-950'
+                        : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                    }`}
+                  >
+                    {range}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
           <div className="glass-card rounded-2xl p-5">
             {stockHistoryLoading ? (
               <div className="flex h-80 items-center justify-center text-sm text-slate-400">
-                Loading RELIANCE price history...
+                Loading {stockChartSymbol} price history...
               </div>
             ) : stockHistoryError ? (
               <div className="flex h-80 items-center justify-center text-sm text-amber-300">
@@ -586,13 +707,16 @@ export default function InvestmentsPage() {
               </div>
             ) : stockHistory.length === 0 ? (
               <div className="flex h-80 items-center justify-center text-sm text-slate-400">
-                No historical price data available.
+                No historical price data available for {stockChartSymbol}.
               </div>
             ) : (
               <div className="h-80 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <PriceLineChart data={stockHistory}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.12)" />
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="rgba(148,163,184,0.12)"
+                    />
                     <XAxis
                       dataKey="date"
                       tick={{ fontSize: 11, fill: '#94a3b8' }}
@@ -600,7 +724,9 @@ export default function InvestmentsPage() {
                     />
                     <YAxis
                       tick={{ fontSize: 11, fill: '#94a3b8' }}
-                      tickFormatter={(value) => `₹${Number(value).toLocaleString('en-IN')}`}
+                      tickFormatter={(value) =>
+                        `₹${Number(value).toLocaleString('en-IN')}`
+                      }
                       width={75}
                       domain={['auto', 'auto']}
                     />
@@ -609,7 +735,7 @@ export default function InvestmentsPage() {
                         `₹${Number(value).toLocaleString('en-IN', {
                           maximumFractionDigits: 2,
                         })}`,
-                        'RELIANCE',
+                        stockChartSymbol,
                       ]}
                     />
                     <Line
@@ -627,8 +753,8 @@ export default function InvestmentsPage() {
           </div>
 
           <p className="text-xs text-slate-500">
-            Historical market data is provided through Yahoo Finance/yfinance and
-            may be delayed. This chart is for informational purposes only.
+            Historical market data is provided through Yahoo Finance/yfinance
+            and may be delayed. This chart is for informational purposes only.
           </p>
         </section>
 
@@ -977,16 +1103,16 @@ export default function InvestmentsPage() {
                 Risk Profile
               </label>
               <select
-  className="input-field"
-  value={riskTolerance}
-  onChange={(e) =>
-    setRiskTolerance(e.target.value as 'Low' | 'Moderate' | 'High')
-  }
->
-  <option value="Low">Low</option>
-  <option value="Moderate">Moderate</option>
-  <option value="High">High</option>
-</select>
+                className="input-field"
+                value={riskTolerance}
+                onChange={(e) =>
+                  setRiskTolerance(e.target.value as 'Low' | 'Moderate' | 'High')
+                }
+              >
+                <option value="Low">Low</option>
+                <option value="Moderate">Moderate</option>
+                <option value="High">High</option>
+              </select>
             </div>
           </div>
 
